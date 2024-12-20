@@ -7,12 +7,13 @@ import Navbar from "./components/navbars/Navbar";
 import {Footer} from "./components/footers/Footer";
 import Delivery from "./pages/Delivery";
 import AboutUs from "./pages/AboutUs";
-
 import {Provider} from 'react-redux';
 import {AppContextProvider} from "./contexts/context";
 import {store} from "./redux/store";
 import CatalogPage from "./pages/Catalog";
-
+import AuthModal from "./components/auth/AuthModal";
+import ProfileModal from "./components/auth/ProfileModal";
+import ProductDetails from "./pages/ProductDetail";
 
 function App() {
     return (
@@ -28,9 +29,12 @@ function App() {
                             <Route path="/delivery" element={<Delivery/>}/>
                             <Route path="/about" element={<AboutUs/>}/>
                             <Route path="/catalogs" element={<CatalogPage/>}/>
+                            <Route path="/products/:id" element={<ProductDetails/>}/>
                         </Routes>
                         <Footer/>
                     </Router>
+                    <AuthModal/>
+                    <ProfileModal/>
                 </div>
             </AppContextProvider>
         </Provider>

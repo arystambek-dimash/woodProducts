@@ -1,98 +1,51 @@
-import React, {useState, useRef, useEffect} from "react";
+import React from "react";
+import {useNavigate} from "react-router-dom";
 
 function ProductCard({productData, cardWidth = 300}) {
-    const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const [startX, setStartX] = useState(null);
-    const [currentTranslate, setCurrentTranslate] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const sliderRef = useRef(null);
+    const navigate = useNavigate();
 
-    const handleDragStart = (e) => {
-        setIsDragging(true);
-        setStartX(e.type === 'touchstart' ? e.touches[0].clientX : e.clientX);
+    const handleCardClick = () => {
+        navigate(`/products/${productData.id}`);
     };
-
-    const handleDragMove = (e) => {
-        if (!isDragging || startX === null) return;
-
-        const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        const diff = startX - currentX;
-        const translate = Math.max(
-            Math.min(diff, cardWidth),
-            -cardWidth
-        );
-
-        setCurrentTranslate(translate);
-
-        if (Math.abs(translate) > cardWidth * 0.25) {
-            const newIndex = translate > 0
-                ? (activeImageIndex + 1) % productData.images.length
-                : (activeImageIndex - 1 + productData.images.length) % productData.images.length;
-            setActiveImageIndex(newIndex);
-            handleDragEnd();
-        }
-    };
-
-    const handleDragEnd = () => {
-        setIsDragging(false);
-        setStartX(null);
-        setCurrentTranslate(0);
-    };
-
-    useEffect(() => {
-        setCurrentTranslate(0);
-    }, [activeImageIndex]);
 
     return (
         <article
-            className="overflow-hidden border border-gray-300 rounded-lg p-4 bg-white shadow-sm"
+            onClick={handleCardClick}
+            className="overflow-hidden border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
             style={{width: `${cardWidth}px`}}
             aria-label={`Product card for ${productData.name}`}
         >
-            <div
-                ref={sliderRef}
-                className="relative select-none cursor-grab active:cursor-grabbing mb-4"
-                onMouseDown={handleDragStart}
-                onMouseMove={handleDragMove}
-                onMouseUp={handleDragEnd}
-                onMouseLeave={handleDragEnd}
-                onTouchStart={handleDragStart}
-                onTouchMove={handleDragMove}
-                onTouchEnd={handleDragEnd}
-            >
-                <div
-                    className="flex justify-center transition-transform duration-300 ease-out"
-                    style={{
-                        transform: `translateX(${-currentTranslate}px)`,
-                        width: `${cardWidth-50}px`,
-                        height: '250px'
-                    }}
-                >
+            <div className="relative aspect-square mb-4">
+                {productData.image ? (
                     <img
-                        src={productData.images[activeImageIndex].src}
-                        alt={productData.images[activeImageIndex].alt}
-                        className="w-full h-full object-contain flex-shrink-0"
+                        src={productData.image}
+                        alt={productData.name}
+                        className="w-full h-full object-cover rounded-md"
                     />
-                </div>
-
-                <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded-md text-sm">
-                    {activeImageIndex + 1} / {productData.images.length}
-                </div>
+                ) : (
+                    <div
+                        className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 rounded-md">
+                        No image available
+                    </div>
+                )}
             </div>
 
             <div className="flex flex-col items-start w-full">
-                <h2 className="font-medium text-lg text-gray-800 truncate">
-                    {productData.name}
+                <h2 className="font-medium text-lg text-gray-800 truncate w-full">
+                    {productData.name || "Unnamed Product"}
                 </h2>
                 <p className="text-xl font-bold text-gray-900 mt-2">
-                    {productData.price}
+                    {productData.price ? `${productData.price}` : "Price not available"}
                 </p>
             </div>
 
             <div className="flex justify-end items-center w-full mt-4">
                 <button
-                    className="uppercase text-sm font-bold text-orange-500 hover:text-orange-700"
-                    onClick={() => console.log(`Buy ${productData.name}`)}
+                    className="px-4 py-2 text-sm font-semibold text-orange-500 hover:text-orange-600 transition-colors uppercase"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        console.log(`Buy ${productData.name}`);
+                    }}
                     aria-label={`Buy ${productData.name}`}
                 >
                     купить

@@ -1,44 +1,71 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectCatalogItems } from "../redux/catalogSlice";
+import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    fetchCategories,
+    selectCategories,
+    selectCategoriesLoading,
+    selectCategoriesError,
+} from '../redux/categorySlice';
 
 const CatalogPage = () => {
-    const items = useSelector(selectCatalogItems);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const categories = useSelector(selectCategories);
+    const loading = useSelector(selectCategoriesLoading);
+    const error = useSelector(selectCategoriesError);
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
+
+    const handleCategoryClick = (categoryId) => {
+        navigate(`/products?category=${categoryId}`);
+    };
 
     const rows = [];
-    for (let i = 0; i < items.length; i += 3) {
-        rows.push(items.slice(i, i + 3));
+    for (let i = 0; i < categories.length; i += 3) {
+        rows.push(categories.slice(i, i + 3));
     }
 
     return (
         <div className="bg-white py-8">
             <div className="max-w-5xl mx-auto px-4">
                 <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">Каталог</h2>
+
+                {loading && <p>Загрузка категорий...</p>}
+                {error && <p className="text-red-500">Ошибка загрузки категорий: {error}</p>}
+
                 <div className="space-y-8">
-                    {rows.map((rowItems, rowIndex) => (
-                        <div
-                            key={rowIndex}
-                            className="grid grid-cols-3 gap-4"
-                            style={{ gridTemplateColumns: `repeat(${rowItems.length}, minmax(0, 1fr))` }}
-                        >
-                            {rowItems.map((item, index) => (
-                                <CatalogCard
-                                    key={index}
-                                    title={item.title}
-                                    imageUrl={item.imageUrl}
-                                />
-                            ))}
-                        </div>
-                    ))}
+                    {!loading &&
+                        rows.map((rowItems, rowIndex) => (
+                            <div
+                                key={rowIndex}
+                                className="grid grid-cols-3 gap-4"
+                                style={{gridTemplateColumns: `repeat(${rowItems.length}, minmax(0, 1fr))`}}
+                            >
+                                {rowItems.map((item) => (
+                                    <CatalogCard
+                                        key={item.id}
+                                        title={item.name}
+                                        imageUrl={item.image}
+                                        onClick={() => handleCategoryClick(item.id)}
+                                    />
+                                ))}
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>
     );
 };
 
-const CatalogCard = ({ title, imageUrl }) => {
+const CatalogCard = ({title, imageUrl, onClick}) => {
     return (
-        <div className="relative group w-full h-48 bg-gray-200 rounded overflow-hidden cursor-pointer">
+        <div
+            className="relative group w-full h-48 bg-gray-200 rounded overflow-hidden cursor-pointer"
+            onClick={onClick}
+        >
             <img
                 src={imageUrl}
                 alt={title}

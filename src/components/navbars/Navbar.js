@@ -1,9 +1,12 @@
-import * as React from "react";
-import {useState, useEffect} from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../contexts/context";
+import { useSelector } from 'react-redux';
 
-function MainNavigation() {
+function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const { openAuthModal, openProfileModal } = useContext(AppContext);
+    const token = useSelector((state) => state.user.token);
 
     useEffect(() => {
         const checkScreenSize = () => {
@@ -31,8 +34,8 @@ function MainNavigation() {
                     <a href="/" className="flex-shrink-0">
                         <img
                             loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e8e84c0fa3058d5450c36cd33bf42073187fefa8055feb777ea1561967ceb099?placeholderIfAbsent=true&apiKey=16603df5d5d944c0a2f195bca3358cf0"
-                            className="object-contain max-w-full aspect-[1.77] fill-white w-[106px]"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e8e84c0fa3058d5450c36cd33bf42073187fefa8055feb777ea1561967ceb099"
+                            className="object-contain max-w-full aspect-[1.77] w-[106px]"
                             alt="Sofia Doors Logo"
                         />
                     </a>
@@ -69,7 +72,6 @@ function MainNavigation() {
                                         key={index}
                                         href={link.href}
                                         className="text-white hover:text-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-200"
-                                        tabIndex="0"
                                     >
                                         {link.text}
                                     </a>
@@ -79,22 +81,30 @@ function MainNavigation() {
                                 <a
                                     href="mailto:support@sofiadoors.com"
                                     className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
-                                    tabIndex="0"
                                 >
                                     support@sofiadoors.com
                                 </a>
-                                <a
-                                    href="/login"
-                                    className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
-                                    tabIndex="0"
-                                >
-                                    Войти
-                                </a>
+                                {!token && (
+                                    <button
+                                        className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                        onClick={openAuthModal}
+                                    >
+                                        Войти
+                                    </button>
+                                )}
+                                {token && (
+                                    <button
+                                        className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                        onClick={openProfileModal}
+                                    >
+                                        Профиль
+                                    </button>
+                                )}
                                 <div className="flex flex-col items-center">
                                     <img
                                         loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/b3b3e0d6c6f3cf004dba33e0bc3efddc897445a4435415de1c4fd6b949789797?placeholderIfAbsent=true&apiKey=16603df5d5d944c0a2f195bca3358cf0"
-                                        className="object-contain w-[34px] aspect-[11.36]"
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/b3b3e0d6c6f3cf004dba33e0bc3efddc897445a4435415de1c4fd6b949789797"
+                                        className="object-contain w-[34px]"
                                         alt=""
                                         aria-hidden="true"
                                     />
@@ -107,8 +117,8 @@ function MainNavigation() {
                                     </button>
                                     <img
                                         loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/379e3fb20d0a0159c8bbe3d0ca9c2a5bdef891679bc4a133e1d60f162f41d25e?placeholderIfAbsent=true&apiKey=16603df5d5d944c0a2f195bca3358cf0"
-                                        className="object-contain w-[65px] aspect-[32.26] mt-2"
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/379e3fb20d0a0159c8bbe3d0ca9c2a5bdef891679bc4a133e1d60f162f41d25e"
+                                        className="object-contain w-[65px] mt-2"
                                         alt=""
                                         aria-hidden="true"
                                     />
@@ -131,7 +141,6 @@ function MainNavigation() {
                                     href={link.href}
                                     className="text-white hover:text-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-200"
                                     role="menuitem"
-                                    tabIndex="0"
                                 >
                                     {link.text}
                                 </a>
@@ -140,22 +149,32 @@ function MainNavigation() {
                                 href="mailto:support@sofiadoors.com"
                                 className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
                                 role="menuitem"
-                                tabIndex="0"
                             >
                                 support@sofiadoors.com
                             </a>
-                            <a
-                                href="/login"
-                                className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
-                                role="menuitem"
-                                tabIndex="0"
-                            >
-                                Войти
-                            </a>
+                            {!token && (
+                                <button
+                                    className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                    role="menuitem"
+                                    onClick={() => { setIsMenuOpen(false); openAuthModal(); }}
+                                >
+                                    Войти
+                                </button>
+                            )}
+                            {token && (
+                                <button
+                                    className="text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-200"
+                                    role="menuitem"
+                                    onClick={() => { setIsMenuOpen(false); openProfileModal(); }}
+                                >
+                                    Профиль
+                                </button>
+                            )}
                             <button
                                 className="px-4 py-2 text-sm font-bold tracking-wider uppercase border border-white bg-stone-500 hover:bg-stone-600 focus:outline-none focus:ring-2 focus:ring-orange-200"
                                 role="menuitem"
                                 aria-label="Open catalog"
+                                onClick={() => { setIsMenuOpen(false); window.location.href = '/catalogs'; }}
                             >
                                 Каталог
                             </button>
@@ -167,4 +186,4 @@ function MainNavigation() {
     );
 }
 
-export default MainNavigation;
+export default Navbar;

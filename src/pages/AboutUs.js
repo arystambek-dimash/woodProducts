@@ -4,16 +4,16 @@ const AboutUsPage = () => {
     return (
         <div className="bg-white text-gray-900">
             <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
-                <h1 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] text-[40px] font-bold leading-[64px] tracking-[-0.64px]">
+                <h1 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px]  font-bold leading-[64px] tracking-[-0.64px]">
                     H1. Длинный заголовок типовой страницы, чтобы настроить интерлиньяж
                 </h1>
                 <img
-                    src="https://via.placeholder.com/1000x500?text=Image"
+                    src="https://www.finestmulch.com/images/blocks/smallimage/thumb_1686840525truck-pic.jpg"
                     alt="Section"
                     className="w-full h-auto rounded mb-8"
                 />
 
-                <h2 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] text-[40px] font-bold leading-[64px] tracking-[-0.64px]">
+                <h2 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px]  font-bold leading-[64px] tracking-[-0.64px]">
                     H2. Многострочный заголовок, длина которого иногда бывает так некстати
                 </h2>
                 <p className="mb-4 leading-relaxed">
@@ -28,12 +28,12 @@ const AboutUsPage = () => {
                 </p>
 
                 <img
-                    src="https://via.placeholder.com/1000x500?text=Another+Image"
+                    src="https://www.woodproductskenya.co.ke/wp-content/uploads/elementor/thumbs/WOOD-PRODUCTS-BRCHURE-1-scaled-pjc4o8xmmnef6eaq2jslye3fqinok43r2teb4gh4iw.jpg"
                     alt="Section"
                     className="w-full h-auto rounded mb-8"
                 />
 
-                <h3 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] text-[40px] font-bold leading-[64px] tracking-[-0.64px]">
+                <h3 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px]  font-bold leading-[64px] tracking-[-0.64px]">
                     H3. Делаем заголовки нарочито длинными, чтобы убедиться в правильном интерлиньяжe
                 </h3>
                 <p className="mb-4 leading-relaxed">
@@ -41,7 +41,7 @@ const AboutUsPage = () => {
                     сложное, текстом назвать нельзя, поскольку текст можно разделить на самостоятельные предложения.
                 </p>
 
-                <h4 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] text-[40px] font-bold leading-[64px] tracking-[-0.64px]">
+                <h4 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] font-bold leading-[64px] tracking-[-0.64px]">
                     H4. Текст состоит из некоторого количества предложений. Одно предложение...
                 </h4>
                 <p className="mb-4 leading-relaxed">
@@ -64,7 +64,7 @@ const AboutUsPage = () => {
                     самостоятельные предложения.
                 </p>
 
-                <h5 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] text-[40px] font-bold leading-[64px] tracking-[-0.64px]">
+                <h5 className="text-[#3B3937] font-[PermianSerifTypeface] mt-12 lg:text-[52px] font-bold leading-[64px] tracking-[-0.64px]">
                     H5. Текст состоит из некоторого количества предложений. Одно предложение...
                 </h5>
                 <p className="mb-8 leading-relaxed">

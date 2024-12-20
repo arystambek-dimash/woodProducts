@@ -11,7 +11,7 @@ const DeliveryAndPayment = () => {
                 <div className="flex flex-col md:flex-row md:space-x-8">
                 <div className="md:w-1/2 mb-8 md:mb-0">
                         <img
-                            src="https://via.placeholder.com/600x400?text=Delivery+Image"
+                            src="https://media.istockphoto.com/id/1221101939/photo/delivery-concept-asian-man-hand-accepting-a-delivery-boxes-from-professional-deliveryman-at.jpg?s=612x612&w=0&k=20&c=jvZ_phbXmzOrCCZiGn8ZQO99a5skBJlclbujI5jGam8="
                             alt="Доставка"
                             className="w-full h-auto rounded shadow"
                         />

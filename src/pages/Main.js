@@ -1,90 +1,45 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import InfoCardsSection from "../components/cards/InfoCardsSection";
 import {CatalogNavbar} from "../components/navbars/CatalogNavbar";
 import ProductCard from "../components/cards/ProductCard";
 import AssistanceForm from "../components/boxes/AssistanceForm";
 import Container from "../components/boxes/Container";
+import {fetchProductsAPI} from "../api";
+import {debounce} from "lodash";
 
 const Main = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const slides = [
-        "Архитектурные решения для вашего дома",
-        "Дизайн интерьера для современных пространств",
-        "Деревянные конструкции высочайшего качества",
-        "Экологически чистые материалы для строительства",
-        "Уникальный стиль для ваших проектов",
-        "Современные тенденции в дизайне и строительстве",
-    ];
+    // Дебаунс для предотвращения лишних запросов
+    const fetchProducts = debounce(async (category) => {
+        setLoading(true);
+        try {
+            const filters = category ? {category} : {};
+            const data = await fetchProductsAPI(filters);
+            setProducts(data.results);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, 300); // 300 мс задержки перед выполнением
 
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    useEffect(() => {
+        fetchProducts(selectedCategory);
+        // Очистка эффекта при размонтировании
+        return () => fetchProducts.cancel();
+    }, [selectedCategory]);
+
+    const displayedProducts = products.slice(0, 8);
+
+    const handleShowAll = () => {
+        const queryParams = selectedCategory ? `?category=${selectedCategory}` : "";
+        navigate(`/products${queryParams}`);
     };
-
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    };
-
-    const products = [
-        {
-            name: "Sofia Original 50.07",
-            price: "24 500 ₽",
-            images: [
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "Sofia Original 50.07 main product view",
-                },
-            ],
-        },
-        {
-            name: "VISION Модель 64.43",
-            price: "24 500 ₽",
-            images: [
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f4bdc3ef6725481c85b47029466f910aabc8e653fc4ff5335fec2d5c9de6f583",
-                    alt: "VISION Модель 64.43 product view",
-                },
-            ],
-        },
-        {
-            name: "SKYLINE Модель 55.21",
-            price: "24 500 ₽",
-            images: [
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "SKYLINE Модель 55.21 product view",
-                },
-            ],
-        },
-        {
-            name: "CLASSIC Модель 65.44",
-            price: "24 500 ₽",
-            images: [
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "CLASSIC Модель 65.44 product view",
-                },
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "CLASSIC Модель 65.44 product view",
-                },
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "CLASSIC Модель 65.44 product view",
-                },
-            ],
-        },
-        {
-            name: "METAMORFOSA Модель 65.171",
-            price: "24 500 ₽",
-            images: [
-                {
-                    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/69acfcb2a5ff20246c41a91f0eb605e147db64f70d3dacec98320318d509be45",
-                    alt: "METAMORFOSA Модель 65.171 product view",
-                },
-            ],
-        },
-    ];
 
     return (
         <div>
@@ -137,22 +92,29 @@ const Main = () => {
                     </div>
                     <div>
                         <div className="pt-8">
-                            <CatalogNavbar/>
+                            <CatalogNavbar onCategorySelect={setSelectedCategory}/>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-center">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 mt-10">
-                                {products.map((product, index) => (
-                                    <ProductCard key={index} productData={product}/>
-                                ))}
-                            </div>
+                            {loading ? (
+                                <p className="text-center">Загрузка...</p>
+                            ) : (
+                                <div
+                                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 mt-10">
+                                    {displayedProducts.map((product, index) => (
+                                        <ProductCard key={index} productData={product}/>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                         <div
-                            className="flex flex-col pt-8 text-base font-bold tracking-wider leading-snug text-center uppercase text-neutral-700">
+                            className="flex flex-col pt-8 text-base font-bold tracking-wider leading-snug text-center uppercase text-neutral-700"
+                        >
                             <button
                                 aria-label="Show more content"
                                 className="px-14 py-6 w-full border border-solid border-neutral-700 border-opacity-20 max-md:px-5 max-md:max-w-full"
+                                onClick={handleShowAll}
                             >
                                 показать все
                             </button>

@@ -5,7 +5,7 @@ const AssistanceForm = () => {
         <div className="flex flex-col md:flex-row items-center gap-5 md:gap-8 bg-[#f8f4f0] p-6 md:p-12 rounded-lg">
             <div className="w-full md:w-1/2 md:pr-6">
                 <img
-                    src="https://via.placeholder.com/400x400"
+                    src="https://www.oceanhomemag.com/wp-content/uploads/migration_images/Wood-Interior-Design/Woodinteriors.png"
                     alt="Interior Design"
                     className="w-full object-cover rounded-md"
                 />
